@@ -6,7 +6,7 @@ const url = 'https://course-api.com/react-tabs-project'
 function App() {
   const [tabData, setTabData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState({});
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -14,7 +14,6 @@ function App() {
       const responseData = await response.json()
 
       setTabData(responseData);
-      setActiveTab(responseData[0]);
       setIsLoading(false);
     }
     fetchData();
@@ -27,6 +26,10 @@ function App() {
       </div>
     )
   }
+   
+  const handleTab = (index) => {
+    setActiveTab(index)
+  } 
 
   return (
     <section className='section'>
@@ -36,16 +39,18 @@ function App() {
       </div>
       <div className='jobs-center'>
         <div className='btn-container'>
-          <button className='job-btn'>{activeTab.company}</button>
-          <button className='job-btn'>{activeTab.company}</button>
-          <button className='job-btn'>{activeTab.company}</button>
+          {tabData.map(({ company, id }, index) => {
+            const isActiveBtn = (activeTab === index) ? 'active-btn': '';
+            return (
+              <button key={"item-" + id} className={'job-btn ' + isActiveBtn} onClick={() => handleTab(index)}>{company}</button>
+            )
+          })}
         </div>
-        <article key={activeTab.id} className='job-info'>
-          <h3>{activeTab.title}</h3>
-          <h4>{activeTab.company}</h4>
-          <p className='job-date'>{activeTab.dates}</p>
-
-          {activeTab.duties.map((duty, id) => {
+        <article key={tabData[activeTab].id} className='job-info'>
+          <h3>{tabData[activeTab].title}</h3>
+          <h4>{tabData[activeTab].company}</h4>
+          <p className='job-date'>{tabData[activeTab].dates}</p>
+          {tabData[activeTab].duties.map((duty, id) => {
             return (
               <div key={id} className='job-desc'>
                 <FaAngleDoubleRight />
