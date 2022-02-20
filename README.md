@@ -1,1 +1,1 @@
-[Tabs](https://veronchi.github.io/tabs/)
+[Tabs](https://veronchi.github.io/tabs/build)
